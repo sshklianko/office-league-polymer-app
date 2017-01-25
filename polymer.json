@@ -5,6 +5,8 @@
     "src/games.html",
     "src/players.html",
     "src/teams.html",
+    "src/games/game.html",
+    "src/games/games-list.html",
     "src/view404.html"
   ],
   "sourceGlobs": [

@@ -1,0 +1,133 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="played-game">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+            }
+            .game {
+                width: 100%;
+            }
+            .game-info, .game-date {
+                margin-top: 15px;
+                line-height: 36px;
+            }
+            .winner, .losser {
+                margin-top: 15px;
+                line-height: 36px;
+            }
+            .game-info {
+                margin-right: 20px;
+            }
+            .game-date {
+                margin-left: 20px;
+            }
+            .losser {
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+            .header {
+                background-color: cadetblue;
+                color: white;
+                height: 36px;
+            }
+
+            paper-item {
+                padding: 10px;
+                margin-top: 50px;
+            }
+
+            .status-bar {
+                margin: 10px;
+                background-color: rgba(141, 190, 184, 0.5);
+            }
+
+            .footer {
+                margin-right: 15px;
+                margin-top: 15px;
+            }
+
+            .inline {
+                display: inline;
+            }
+
+            .center {
+                text-align: center;
+            }
+        </style>
+
+        <paper-material>
+            <paper-item>
+                <div class="game">
+                    <div class="header center">
+                        <div class="game-info inline">{{gameinfo.displayName}}</div>
+                        <div class="game-date inline">{{gameinfo.date}}</div>
+                    </div>
+                    <div class="status-bar center">
+                        <div class="winner inline">{{getWinningTeamName(gameinfo)}}</div>
+                        <div class="losser inline">{{getLosersTeamName(gameinfo)}}</div>
+                    </div>
+                    <div class="statistics center">
+                        <div class="winner-stats inline">
+                            <iron-list grid id="winners-list" items="{{gameinfo.winners}}" as="winner" selection-enabled>
+                                <template>
+                                    <div style="width: 100px;">
+                                       {{winner.player.displayName}}
+                                    </div>
+                                </template>
+                            </iron-list>
+                        </div>
+                        <div class="losser-stats inline">
+                            <iron-list grid id="lossers-list" items="{{gameinfo.losers}}" as="loser" selection-enabled>
+                                <template>
+                                    <div style="width: 100px;">
+                                        {{loser.player.displayName}}
+                                    </div>
+                                </template>
+                            </iron-list>
+                        </div>
+                    </div>
+                    <div class="footer center">
+                        <paper-button toggles raised class="details">Details</paper-button>
+                    </div>
+                </div>
+            </paper-item>
+        </paper-material>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'played-game',
+            properties: {
+                gameinfo: {
+                    type: Object,
+                    value: {}
+                }
+            },
+            getWinningTeamName: function (game) {
+                if(game.winners.length > 1) {
+                    return game.winners[0].player.displayName + game.winners[1].player.displayName;
+                }
+                return game.winners[0].player.displayName;
+            },
+            getLosersTeamName: function (game) {
+                if(game.losers.length > 1) {
+                    return game.losers[0].player.displayName + game.losers[1].player.displayName;
+                }
+                return game.losers[0].player.displayName;
+            },
+            getWinner: function (game, index) {
+                return game.winners[index].player.displayName;
+            },
+            getLosser: function (game, index) {
+                return game.losers[index].player.displayName;
+            }
+        });
+    </script>
+</dom-module>

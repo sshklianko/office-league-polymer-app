@@ -1,0 +1,62 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../shared-styles.html">
+<link href="../../bower_components/paper-material/paper-material.html" rel="import">
+<link href="../../bower_components/paper-item/paper-item.html" rel="import">
+<link rel="import" href="game.html">
+
+<dom-module id="games-list">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+
+                padding: 10px;
+            }
+
+            .games-list {
+                max-width: 800px;
+                margin: 0 auto;
+            }
+        </style>
+
+        <div class="games-list">
+            <template is="dom-if" if="{{!data.length}}">
+                <paper-material>
+                    <paper-item>No games played yet.</paper-item>
+                </paper-material>
+            </template>
+            <template id="games" is="dom-repeat" items="{{data}}">
+                <played-game gameinfo="{{item}}"></played-game>
+            </template>
+        </div>
+    </template>
+
+    <script>
+        Polymer({
+            is: 'games-list',
+            properties: {
+                data: {
+                    type: Array,
+                    value: [
+                        {
+                            id: 1,
+                            displayName: "Game 1",
+                            date: "2017-01-25",
+                            winners: [{player: "Pla1"}, {player: "Pla2"}],
+                            losers: [{player: "Pla3"}, {player: "Pla4"}],
+                            goal: []
+                        },
+                        {
+                            id: 2,
+                            displayName: "Game 2",
+                            date: "2017-01-25",
+                            winners: [{player: "Pla1"}, {player: "Pla2"}],
+                            losers: [{player: "Pla3"}, {player: "Pla4"}],
+                            goal: []
+                        }
+                    ]
+                }
+            }
+        });
+    </script>
+</dom-module>
