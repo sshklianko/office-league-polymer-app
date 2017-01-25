@@ -9,29 +9,164 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="shared-styles.html">
+<link rel="import" href="../bower_components/iron-data-table/iron-data-table.html">
+<style is="custom-style" include="iron-flex"></style>
+
 
 <dom-module id="players-page">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+    <template is="dom-bind">
+        <style include="shared-styles">
 
-        padding: 10px;
-      }
-    </style>
+            :host {
+                display: block;
+                @apply(--paper-font-common-base);
+            }
+            app-toolbar {
+                font-size: 18px;
+                font-weight: bold;
+                background-color: var(--google-blue-700);
+                box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
+                color: white;
+                z-index: 1;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+            }
+            app-toolbar paper-icon-button {
+                --paper-icon-button-ink-color: white;
+            }
+            #list {
+                margin-top: 63px;
+                --iron-list-items-container: {
+                    max-width: 800px;
+                    margin: 10px auto;
+                    border-bottom: 1px solid #ddd;
+                };
+            }
+            .group-header,
+            .group-item {
+                padding: 15px 20px;
+                background-color: white;
+                font-size: 15px;
+            }
+            .group-item {
+                @apply(--layout-horizontal);
+                cursor: pointer;
+                border-left: 1px solid #ddd;
+                border-right: 1px solid #ddd;
+            }
+            .group-header {
+                font-weight: bold;
+                border: 1px solid #ddd;
+                color: #333;
+                margin-top: 20px;
+            }
+            .group-header:before {
+                content: '';
+                border-top: 1px solid #ddd;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+            }
+            .avatar {
+                height: 20px;
+                width: 20px;
+                border-radius: 20px;
+                box-sizing: border-box;
+                background-color: #DDD;
+                margin-right: 16px;
+            }
+            .pad {
+                line-height: 20px;
+                @apply(--layout-horizontal);
+            }
+            .secondary {
+                color: gray;
+                margin-left: 10px;
+            }
+            .state-list {
+                width: 250px;
+                height: 80vh;
+                color: black;
+            }
+        </style>
 
-    <div class="card">
-      <div class="circle">3</div>
-      <h1>Players</h1>
-      <p>Modus commodo minimum eum te, vero utinam assueverit per eu.</p>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.Has at minim mucius aliquam, est id tempor laoreet.Pro saepe pertinax ei, ad pri animal labores suscipiantur.</p>
-    </div>
-  </template>
+        <div class="card">
+            <div class="circle">3</div>
+            <h1>Players</h1>
 
-  <script>
-    Polymer({
-      is: 'players-page',
-    });
-  </script>
+
+            <template is="dom-bind">
+                <iron-ajax url="players.json" last-response="{{players}}" auto></iron-ajax>
+                <iron-data-table items="[[players]]">
+                    <data-table-column flex="0" width="50px" name="">
+                        <template>
+                            <iron-image class="avatar" sizing="contain" src="images/[[item.image]]"></iron-image>
+
+                        </template>
+                    </data-table-column>
+                    <data-table-column name="Rank">
+                        <template>
+                            [[item.rating]]
+                        </template>
+                    </data-table-column>
+                    <data-table-column name="Player">
+                        <template>
+                            [[item.nickname]]
+                        </template>
+                    </data-table-column>
+                </iron-data-table>
+            </template>
+
+
+        </div>
+    </template>
+
+
+
+    <script>
+
+            Polymer({
+                is: 'players-page',
+
+                attached: function() {
+                    this._groupIdxMap = {};
+                },
+                _generateGroupsFor: function(items) {
+                    // Sort by state name
+                    var items = items.slice().sort(function(a, b) {
+                        return a.state.localeCompare(b.state);
+                    });
+                    var states = [];
+                    // Group by state where _groupIdxMap[index] = true means that items[index] starts a new group
+                    this._groupIdxMap = items.reduce(function(map, item, idx, arr) {
+                        if (idx == 0 || item.state != arr[idx-1].state) {
+                            map[idx] = true;
+                            states.push({ state: item.state, index: idx });
+                        }
+                        return map;
+                    }, {});
+                    this.states = states;
+                    return items;
+                },
+                _hasGroup: function(idx) {
+                    return this._groupIdxMap[idx] == true;
+                },
+                _onStateClick: function(e) {
+                    // scroll on the main list
+                    this.$.menu.close();
+                    this.$.list.scrollToIndex(e.model.item.index);
+                }
+            });
+
+
+    </script>
+</dom-module>
 </dom-module>

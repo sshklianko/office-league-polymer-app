@@ -17,8 +17,9 @@
     "paper-icon-button": "PolymerElements/paper-icon-button#~1.1.0",
     "polymer": "Polymer/polymer#^1.6.0",
     "iron-list": "polymerelements/iron-list#^1.4.0",
-    "iron-image": "polymerelements/iron-image#^1.2.5",
-    "iron-ajax": "polymerelements/iron-ajax#^1.4.3"
+    "iron-image": "PolymerElements/iron-image#^1.2.5",
+    "iron-ajax": "PolymerElements/iron-ajax#^1.4.3",
+    "iron-data-table": "^1.0.6"
   },
   "devDependencies": {
     "web-component-tester": "^4.0.0"
