@@ -1,0 +1,100 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="team-template">
+    <template>
+        <style include="shared-styles">
+
+            :host(:focus) .team-container {
+                outline: dotted 1px;
+                outline: -webkit-focus-ring-color auto 5px;
+            }
+
+            .team-container {
+                padding: 20px;
+                background-color: white;
+                border: 1px solid #ddd;
+                cursor: pointer;
+                margin-bottom: 10px;
+            }
+            .team {
+                padding: 0 16px;
+                @apply(--layout-flex);
+                @apply(--layout-horizontal);
+                -webkit-flex-basis: 0%;
+                flex-basis: 0%;
+            }
+
+            .team-name {
+                font-size: 16px;
+                font-weight: bold;
+                @apply(--layout-flex-11);
+
+            }
+
+            .team-rating {
+                @apply(--layout-flex-1);
+            }
+
+            :host(.first) .team-rating {
+                background-image: url();
+            }
+
+            .players {
+                display: none;
+                @apply(--layout-flex);
+                -webkit-flex-basis: 0%;
+                flex-basis: 0%;
+                justify-content: center;
+                padding-top: 20px;
+            }
+
+            :host(.expanded) .players {
+                display: flex;
+            }
+
+            .player {
+                font-weight: bold;
+                font-size: 24px;
+                padding: 0 20px;
+                text-align: center;
+            }
+
+            .player el {
+                font-weight: normal;
+                font-size: 18px;
+            }
+        </style>
+        <div class="team-container" tabIndex="0">
+            <div class="team">
+                <div class="team-name">[[team.index]]. [[team.displayName]]</div>
+                <div class="team-rating">[[team.rating]]</div>
+            </div>
+            <div class="players">
+                <div class="player">[[getPlayerProperty(team, 0, 'displayName')]]<br><el>[[getPlayerProperty(team, 0, 'rating')]]</el></div>
+                <div style="padding-top: 5px;">+</div>
+                <div class="player">[[getPlayerProperty(team, 1, 'displayName')]]<br><el>[[getPlayerProperty(team, 1, 'rating')]]</el></div>
+            </div>
+        </div>
+    </template>
+
+
+    <script>
+        Polymer({
+            is: 'team-template',
+            properties: {
+                team: {
+                    type: Object
+                }
+            },
+            getIndex: function(index) {
+                return index + 1;
+            },
+
+            getPlayerProperty: function(item, index, field) {
+                return item.players[index][field];
+            }
+
+        });
+    </script>
+</dom-module>

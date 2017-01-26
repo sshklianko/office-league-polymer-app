@@ -22,7 +22,7 @@
         <div class="games-list">
             <template is="dom-if" if="{{!data.length}}">
                 <paper-material>
-                    <paper-item>No games played yet.</paper-item>
+                    <paper-item>No games played yet or you are offline.</paper-item>
                 </paper-material>
             </template>
             <template id="games" is="dom-repeat" items="{{data}}">

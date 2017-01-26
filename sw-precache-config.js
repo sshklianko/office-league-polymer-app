@@ -14,7 +14,14 @@ module.exports = {
   staticFileGlobs: [
     '/index.html',
     '/manifest.json',
-    '/bower_components/webcomponentsjs/webcomponents-lite.min.js',
+    'src/players.json',
+    'images/*',
+    'images/manifest/*',
+    '/bower_components/webcomponentsjs/webcomponents-lite.min.js'
   ],
-  navigateFallback: 'index.html'
+  navigateFallback: 'index.html',
+  runtimeCaching: [{
+    urlPattern: /\/powerful-plateau-26248.herokuapp.com\//,
+    handler: 'networkFirst'
+  }]
 };

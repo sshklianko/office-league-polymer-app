@@ -15,6 +15,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/iron-image/iron-image.html">
 <link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="teams/team.html">
 
 <dom-module id="teams-page">
   <template>
@@ -34,14 +37,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           border-bottom: 1px solid #ddd;
         };
       }
-
       .item {
         @apply(--layout-vertical);
-        padding: 20px;
-        background-color: white;
-        border: 1px solid #ddd;
-        cursor: pointer;
-        margin-bottom: 10px;
+        outline-width: 0;
       }
 
       .avatar {
@@ -50,59 +48,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         border-radius: 20px;
         box-sizing: border-box;
         background-color: #DDD;
-      }
-
-      .team {
-        padding: 0 16px;
-        @apply(--layout-flex);
-        @apply(--layout-horizontal);
-        -webkit-flex-basis: 0%;
-        flex-basis: 0%;
-      }
-
-      .team-name {
-        font-size: 16px;
-        font-weight: bold;
-        @apply(--layout-flex-11);
-
-      }
-
-      .team-rating {
-        @apply(--layout-flex-1);
-      }
-
-      .shortText, .longText {
-        font-size: 14px;
-      }
-
-      .longText {
-        color: gray;
-        display: none;
-      }
-
-      .item .players {
-        display: none;
-        @apply(--layout-flex);
-        -webkit-flex-basis: 0%;
-        flex-basis: 0%;
-        margin: 0 auto;
-      }
-
-      .item.expanded .players {
-        display: flex;
-        padding-top: 20px;
-      }
-
-      .player {
-        font-weight: bold;
-        font-size: 24px;
-        padding: 0 20px;
-        text-align: center;
-      }
-
-      .player el {
-        font-weight: normal;
-        font-size: 18px;
       }
 
       .loadingIndicator {
@@ -137,84 +82,106 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         on-response="_onItemsLoaded"
         last-response="{{response}}">
     </iron-ajax>
+<!--
 
-    <h1 hidden$="[[isLoadingItems]]">Top 10 Teams</h1>
-    <iron-list id="list" items="[[items]]" as="item" selection-enabled multi-selection>
-      <template>
-        <div>
-          <div class$="[[getClassForItem(item, selected)]]" tabindex$="[[tabIndex]]">
-            <!--<iron-image class="avatar" sizing="contain" src="[[item.image]]"></iron-image>-->
-            <div class="team">
-              <div class="team-name">[[getIndex(index)]]. [[item.displayName]]</div>
-              <div class="team-rating">[[item.rating]]</div>
-            </div>
-            <div class="players">
-              <div class="player">[[getPlayerProperty(item, 0, 'displayName')]]<br><el>[[getPlayerProperty(item, 0, 'rating')]]</el></div>
-              <div style="padding-top: 5px;">+</div>
-              <div class="player">[[getPlayerProperty(item, 1, 'displayName')]]<br><el>[[getPlayerProperty(item, 1, 'rating')]]</el></div>
-            </div>
-          </div>
-        </div>
+on-response="_onItemsLoaded"
+
+    <div class="teams-list">
+      <template is="dom-if" if="{{!items.length}}">
+        <paper-material>
+          <paper-item>No games played yet or you are offline.</paper-item>
+        </paper-material>
       </template>
-    </iron-list>
 
-    <div class="loadingIndicator" hidden$="[[!isLoadingItems]]">
-      <img class="spinner" src="../images/spinner.gif">
-      <p>Fetching team data...</p>
-    </div>
+      <template is="dom-if" if="{{items.length}}">
+      -->
+        <h1 hidden$="[[isLoadingItems]]">Top Teams</h1>
+        <iron-list id="list" items="[[items]]" as="item" selection-enabled multi-selection>
+          <template>
+              <team-template team="{{item}}" class$="[[getClassForItem(item, selected, index)]]" tabindex$="[[tabIndex]]"></team-template>
+          </template>
+         </iron-list>
+              <!--     </template>
+                 </div>-->
 
-  </template>
+       <div class="loadingIndicator" hidden$="[[!isLoadingItems]]">
+         <img class="spinner" src="../images/spinner.gif">
+         <p>Fetching team data...</p>
+       </div>
 
-  <script>
-    (function() {
-  Polymer({
-    is: 'teams-page',
+     </template>
 
-    properties: {
+     <script>
+     Polymer({
+       is: 'teams-page',
 
-      items: {
-        type: Array
-      },
+       properties: {
 
-      response: {},
+         items: {
+           type: Array,
+           value: []
+         },
 
-      loadingIndicator: Boolean
+         response: {},
 
-    },
+         loadingIndicator: Boolean
 
-    getIndex: function(index) {
-      return index + 1;
-    },
+       },
 
-    _onItemsLoaded: function(e) {
-      this.items = this.sortItems(this.response.data.teams);
-    },
+       getIndex: function(index) {
+         return index + 1;
+       },
 
-    sortItems: function(items) {
-      return items.sort(function (a, b) {
-        return b.rating - a.rating;
-      });
+       _onItemsLoaded: function(e) {
+         let sortedItems = this.sortItems(this.response.data.teams);
 
-    },
+         if (sortedItems.length == 0) {
+           return;
+         }
 
-    getPlayerProperty: function(item, index, field) {
-      return item.players[index][field];
-    },
+         let minRating = sortedItems[0].rating;
+         let maxRating = sortedItems[sortedItems.length-1].rating;
 
-    attached: function() {
-      // Use the document element
-      this.$.list.scrollTarget = this.ownerDocument.documentElement;
-    },
+         this.items = sortedItems.map((item, index) => {
+           return {
+             displayName: item.displayName,
+             rating: item.rating,
+             players: item.players,
+             index: index + 1,
+             minRating: minRating,
+             maxRating: maxRating
+           }
+         });
+       },
 
-    iconForItem: function(item) {
-      return item ? (item.integer < 50 ? 'star-border' : 'star') : '';
-    },
+       sortItems: function(items) {
+         return items.sort(function (a, b) {
+           return b.rating - a.rating;
+         });
 
-    getClassForItem: function(item, selected) {
-      return selected ? 'item expanded' : 'item';
-    }
+       },
 
-  });
-    })();
-  </script>
-</dom-module>
+       getPlayerProperty: function(item, index, field) {
+         return item.players[index][field];
+       },
+
+       attached: function() {
+         // Use the document element
+         this.$.list.scrollTarget = this.ownerDocument.documentElement;
+       },
+
+       iconForItem: function(item) {
+         return item ? (item.integer < 50 ? 'star-border' : 'star') : '';
+       },
+
+       getClassForItem: function(item, selected, index) {
+         let cls = selected ? 'item expanded' : 'item';
+         if (index == 0) {
+           cls += ' first';
+         }
+         return cls;
+       }
+
+     });
+     </script>
+   </dom-module>
