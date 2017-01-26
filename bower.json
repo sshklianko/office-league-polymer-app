@@ -21,7 +21,7 @@
     "iron-list": "polymerelements/iron-list#^1.4.0",
     "iron-image": "polymerelements/iron-image#^1.2.5",
     "iron-ajax": "polymerelements/iron-ajax#^1.4.3",
-    "paper-button": "PolymerElements/paper-elements/paper-button#^1.0.14",
+    "paper-button": "PolymerElements/paper-button#^1.0.14",
     "iron-data-table": "^1.0.6"
   },
   "devDependencies": {

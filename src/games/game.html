@@ -59,6 +59,14 @@
             .center {
                 text-align: center;
             }
+
+            .statistics {
+                display: flex;
+            }
+
+            .winner-stats, .loser-stats {
+                flex: 1 1 50%;
+            }
         </style>
 
         <paper-material>
@@ -74,22 +82,18 @@
                     </div>
                     <div class="statistics center">
                         <div class="winner-stats inline">
-                            <iron-list grid id="winners-list" items="{{gameinfo.winners}}" as="winner" selection-enabled>
-                                <template>
-                                    <div style="width: 100px;">
-                                       {{winner.player.displayName}}
-                                    </div>
-                                </template>
-                            </iron-list>
+                            <template id="winners" is="dom-repeat" items="{{gameinfo.winners}}">
+                                <div>
+                                    {{item.player.displayName}}
+                                </div>
+                            </template>
                         </div>
-                        <div class="losser-stats inline">
-                            <iron-list grid id="lossers-list" items="{{gameinfo.losers}}" as="loser" selection-enabled>
-                                <template>
-                                    <div style="width: 100px;">
-                                        {{loser.player.displayName}}
-                                    </div>
-                                </template>
-                            </iron-list>
+                        <div class="loser-stats inline">
+                            <template id="losers" is="dom-repeat" items="{{gameinfo.losers}}">
+                                <div>
+                                    {{item.player.displayName}}
+                                </div>
+                            </template>
                         </div>
                     </div>
                     <div class="footer center">
