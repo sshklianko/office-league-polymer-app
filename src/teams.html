@@ -42,14 +42,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         outline-width: 0;
       }
 
-      .avatar {
-        height: 40px;
-        width: 40px;
-        border-radius: 20px;
-        box-sizing: border-box;
-        background-color: #DDD;
-      }
-
       .loadingIndicator {
         text-align: center;
         position: absolute;
@@ -161,17 +153,9 @@ on-response="_onItemsLoaded"
 
        },
 
-       getPlayerProperty: function(item, index, field) {
-         return item.players[index][field];
-       },
-
        attached: function() {
          // Use the document element
          this.$.list.scrollTarget = this.ownerDocument.documentElement;
-       },
-
-       iconForItem: function(item) {
-         return item ? (item.integer < 50 ? 'star-border' : 'star') : '';
        },
 
        getClassForItem: function(item, selected, index) {
