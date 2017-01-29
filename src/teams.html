@@ -76,7 +76,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </iron-ajax>
 <!--
 
-on-response="_onItemsLoaded"
 
     <div class="teams-list">
       <template is="dom-if" if="{{!items.length}}">
@@ -87,7 +86,6 @@ on-response="_onItemsLoaded"
 
       <template is="dom-if" if="{{items.length}}">
       -->
-        <h1 hidden$="[[isLoadingItems]]">Top Teams</h1>
         <iron-list id="list" items="[[items]]" as="item" selection-enabled multi-selection>
           <template>
               <team-template team="{{item}}" class$="[[getClassForItem(item, selected, index)]]" tabindex$="[[tabIndex]]"></team-template>

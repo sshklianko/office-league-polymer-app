@@ -26,6 +26,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 display: block;
                 @apply(--paper-font-common-base);
             }
+
+            .card {
+                margin: 55px;
+                padding: 0;
+            }
+
+            iron-data-table {
+                height: 500px;
+            }
+
+            data-table-row {
+                cursor: default;
+            }
+
             app-toolbar {
                 font-size: 18px;
                 font-weight: bold;
@@ -57,7 +71,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
             .group-item {
                 @apply(--layout-horizontal);
-                cursor: pointer;
                 border-left: 1px solid #ddd;
                 border-right: 1px solid #ddd;
             }
@@ -99,27 +112,35 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
 
         <div class="card">
-            <div class="circle">3</div>
-            <h1>Players</h1>
-
-
             <template is="dom-bind">
-                <iron-ajax url="players.json" last-response="{{players}}" auto></iron-ajax>
-                <iron-data-table items="[[players]]">
+
+                <iron-ajax
+                        auto
+                        id="ajax"
+                        contentType="application/json",
+                        url="https://powerful-plateau-26248.herokuapp.com/?"
+                        params='{"query":"query {players(start:0, count: 100) {displayName, nickname, rating, previousRating}}"}'
+                        handle-as="json"
+                        last-response="{{players}}">
+                </iron-ajax>
+                <iron-data-table items="[[players.data.players]]">
                     <data-table-column flex="0" width="50px" name="">
                         <template>
-                            <iron-image class="avatar" sizing="contain" src="images/[[item.image]]"></iron-image>
+                            <iron-image class="avatar" sizing="contain" src="/images/75.jpg"></iron-image>
 
+                        </template>
+                    </data-table-column>
+                    <data-table-column name="Player">
+                        <template>
+                            [[item.displayName]]
+                            <template is="dom-if" if="{{item.nickname.length}}">
+                                aka [[item.nickname]]
+                            </template>
                         </template>
                     </data-table-column>
                     <data-table-column name="Rank">
                         <template>
                             [[item.rating]]
-                        </template>
-                    </data-table-column>
-                    <data-table-column name="Player">
-                        <template>
-                            [[item.nickname]]
                         </template>
                     </data-table-column>
                 </iron-data-table>
