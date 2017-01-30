@@ -110,18 +110,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         on-response="_onItemsLoaded"
         last-response="{{response}}">
     </iron-ajax>
-<!--
 
-
-    <div class="teams-list">
-      <template is="dom-if" if="{{!items.length}}">
-        <paper-material>
-          <paper-item>No games played yet or you are offline.</paper-item>
-        </paper-material>
-      </template>
-
-      <template is="dom-if" if="{{items.length}}">
-      -->
     <paper-search-input label="Search for player" scale="20" on-value-changed="_onSearchValueChanged"></paper-search-input>
         <iron-list id="list" items="[[items]]" as="item" selection-enabled multi-selection>
           <template>
@@ -172,7 +161,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
            return;
          }
 
-         let searchValue = valueObj.newValue.toLowerCase();
+         var searchValue = valueObj.newValue.toLowerCase();
 
          this.items = this.allItems.filter(function(item) {
            return (item.players[0].displayName.toLowerCase() == searchValue || item.players[1].displayName.toLowerCase() == searchValue);
@@ -195,14 +184,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        },
 
        _onItemsLoaded: function(e) {
-         let sortedItems = this.sortItems(this.response.data.teams);
+         var sortedItems = this.sortItems(this.response.data.teams);
 
          if (sortedItems.length == 0) {
            return;
          }
 
-         let minRating = sortedItems[0].rating;
-         let maxRating = sortedItems[sortedItems.length-1].rating;
+         var minRating = sortedItems[0].rating;
+         var maxRating = sortedItems[sortedItems.length-1].rating;
 
          this.allItems = sortedItems.map((item, index) => {
            return {

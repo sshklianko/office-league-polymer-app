@@ -21,7 +21,15 @@ module.exports = {
   ],
   navigateFallback: 'index.html',
   runtimeCaching: [{
-    urlPattern: /\/powerful-plateau-26248.herokuapp.com\//,
-    handler: 'networkFirst'
+    urlPattern: /powerful-plateau-26248.herokuapp.com/,
+    handler: 'cacheFirst',
+    options: {
+      debug: true,
+      cache: {
+        maxEntries: 10,
+        name: 'office-league-cache',
+        maxAgeSeconds: 180
+      }
+    }
   }]
 };
