@@ -5,6 +5,15 @@
     <template>
         <style include="shared-styles">
 
+            :host {
+                @apply(--layout-vertical);
+                outline-width: 0;
+            }
+
+            :host([hidden]) {
+                display: none;
+            }
+
             :host(:focus) .team-container {
                 outline: dotted 1px;
                 outline: -webkit-focus-ring-color auto 5px;
