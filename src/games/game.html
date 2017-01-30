@@ -1,7 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../shared-styles.html">
 
 <dom-module id="played-game">
@@ -78,6 +81,7 @@
                     </div>
                     <div class="status-bar center">
                         <div class="winner inline">{{getWinningTeamName(gameinfo)}}</div>
+                        <div class="score inline">{{getGameScore(gameinfo)}}</div>
                         <div class="losser inline">{{getLosersTeamName(gameinfo)}}</div>
                     </div>
                     <div class="statistics center">
@@ -85,20 +89,25 @@
                             <template id="winners" is="dom-repeat" items="{{gameinfo.winners}}">
                                 <div>
                                     {{item.player.displayName}}
+                                    <iron-icon icon="icons:assignment-ind"></iron-icon>
                                 </div>
                             </template>
                         </div>
                         <div class="loser-stats inline">
                             <template id="losers" is="dom-repeat" items="{{gameinfo.losers}}">
                                 <div>
+                                    <iron-icon icon="icons:assignment-ind"></iron-icon>
                                     {{item.player.displayName}}
                                 </div>
                             </template>
                         </div>
                     </div>
                     <div class="footer center">
-                        <paper-button toggles raised class="details">Details</paper-button>
+                        <paper-button toggles raised class="details" on-tap="toggleGameDetails">Details</paper-button>
                     </div>
+                    <iron-collapse id="collapse" class="gameDetails">
+                        <div>Game details here...</div>
+                    </iron-collapse>
                 </div>
             </paper-item>
         </paper-material>
@@ -125,11 +134,29 @@
                 }
                 return game.losers[0].player.displayName;
             },
+            getGameScore: function (game) {
+                var winnersGoals = 0;
+                var loserGoals = 0;
+
+                game.goals.forEach(function(goal) {
+                    var winner1Id = game.winners[0].player.id;
+                    var winner2Id = game.winners.length > 1 ? game.winners[1].player.id : null;
+                    if(goal.player.id == winner1Id || goal.player.id == winner2Id) {
+                        goal.against ? loserGoals++ : winnersGoals++;
+                    } else {
+                        goal.against ? winnersGoals++ : loserGoals++;
+                    }
+                });
+                return winnersGoals + " : " + loserGoals;
+            },
             getWinner: function (game, index) {
                 return game.winners[index].player.displayName;
             },
             getLosser: function (game, index) {
                 return game.losers[index].player.displayName;
+            },
+            toggleGameDetails: function() {
+                this.$.collapse.toggle();
             }
         });
     </script>
